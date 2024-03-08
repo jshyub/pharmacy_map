@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SimpleShop</title>
+    <meta charset="utf-8" />
+    <link href="css/simpleShop.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 장바구니에 상품 추가하는 함수
+            function addToCart(productName, price) {
+                // 장바구니에 저장된 데이터를 가져옴
+                var cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                // 새로운 상품을 장바구니에 추가
+                var cartItem = { productName: productName, price: price };
+                cart.push(cartItem);
+
+                // 업데이트된 장바구니 데이터를 로컬 스토리지에 저장
+                localStorage.setItem("cart", JSON.stringify(cart));
+                console.log(localStorage.getItem("cart"));
+                alert(`장바구니에 ${productName}을(를) ${price}원에 담았습니다.`);
+            }
+
+            // 각각의 "장바구니 담기" 버튼에 대한 클릭 이벤트 처리
+            $("#add-to-cart-btn1").click(function() {
+                addToCart("9cm 키높이 어글리슈즈", 54900);
+                redirectToCartPage(); // 상품을 담은 후 장바구니 페이지로 이동
+            });
+            $("#add-to-cart-btn2").click(function() {
+              addToCart("7cm 키높이 스니커즈", 42900);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn3").click(function() {
+              addToCart("매트블랙 첼시부츠", 69000);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn4").click(function() {
+              addToCart("5cm 콜슨 더비 슈즈", 76900);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn5").click(function() {
+              addToCart("4cm 왈라비 스웨이드 슈즈", 155900);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn6").click(function() {
+              addToCart("4cm 배색 캐주얼 독일군", 51900);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn7").click(function() {
+              addToCart("컨버스 데일리 스니커즈", 37900);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn8").click(function() {
+              addToCart("5cm 샤크솔 컨버스 스니커즈", 75900);
+              redirectToCartPage();
+            });
+            $("#add-to-cart-btn9").click(function() {
+              addToCart("5cm 샤크솔 컨버스 하이 스니커즈", 76900);
+              redirectToCartPage();
+            });
+            // 페이지 이동 함수
+            // function redirectToCartPage() {
+            //     var cartData = localStorage.getItem("cart");
+            //     if (cartData) {
+            //         // URL 파라미터로 장바구니 데이터를 전달
+            //         window.location.href = "cart.html?cartData=" + encodeURIComponent(cartData);
+            //     }
+            // }
+        });
+    </script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <a class="logo" href="simpleShop.html">
+        <img src="images/logo.png" height="20px">
+      </a>
+      <div class="search">
+        <input type="text">
+        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+      </div>
+      <ul>
+        <li><a href="#">Contact</a></li>
+        <li><a href="index.html">Map</a></li>
+        <li><a id="cart-icon" href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </div>
+    
+    <img class="hero_header" src="images/main.JPG">
+    <h1>Our new Products</h1>
+    <div class="products">
+      <a href="#">
+        <img src="images/p1.jpg">
+        <p>9cm 키높이 어글리슈즈</p>
+        <p class="price">54,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn1" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p2.jpg">
+        <p>7cm 키높이 스니커즈</p>
+        <p class="price">42,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn2" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p3.jpg">
+        <p>매트블랙 첼시부츠</p>
+        <p class="price">69,000</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn3" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p4.jpg">
+        <p>5CM 콜슨 더비 슈즈</p>
+        <p class="price">76,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn4" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p5.jpg">
+        <p>4CM 왈라비 스웨이드 슈즈</p>
+        <p class="price">155,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn5" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p6.jpg">
+        <p>4CM 배색 캐주얼 독일군</p>
+        <p class="price">51,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn6" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p7.jpg">
+        <p>컨버스 데일리 스니커즈</p>
+        <p class="price">37,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn7" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p8.jpg">
+        <p>5CM 샤크솔 컨버스 스니커즈</p>
+        <p class="price">75,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn8" value="장바구니 담기">
+      </a>
+      <a href="#">
+        <img src="images/p9.jpg">
+        <p>5CM 샤크솔 컨버스 하이 스니커즈</p>
+        <p class="price">76,900</p>
+        <input type="button" name="p1-cart" id="add-to-cart-btn9" value="장바구니 담기">
+      </a>
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="footer">
+      <a href="#"><img src="images/facebook.svg"></a>
+      <a href="#"><img src="images/instagram.svg"></a>
+      <a href="#"><img src="images/twiiter.svg"></a>
+    </div>
+  </body>
+</html>

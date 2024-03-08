@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<style>
+	body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        div {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+</style>
+<head>
+    <title>음료 메뉴 추가</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<h2>음료 메뉴 추가</h2>
+<br>
+<form action="/completeProductAddition" method="POST">
+    <div>
+        <label for="productName">제품명:</label>
+        <input type="text" id="productName" name="productName" required>
+    </div>
+    <div>
+        <label for="productPrice">가격:</label>
+        <input type="text" id="productPrice" name="productPrice" required min="0">
+    </div>
+    <div>
+        <input type="submit" value="추가">
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coffee</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        function saveSelectedDrinks() {
+        // 전체 가격 초기화
+        var totalPrice = 0;
+
+        // 모든 음료 행에 대해 반복
+        var rows = document.querySelectorAll('table tr:not(:first-child)');
+        rows.forEach(function(row) {
+            // 수량 입력 필드
+            var quantityInput = row.cells[2].firstChild;
+
+            // 수량이 1 이상인 경우에만 처리
+            if (quantityInput.value > 0) {
+                // 음료 정보를 가져와서 객체로 생성
+                var drinkInfo = {
+                    name: row.cells[0].textContent,
+                    price: parseFloat(row.cells[1].textContent),
+                    quantity: parseInt(quantityInput.value),
+                    hotOrIced: row.cells[3].querySelector('select').value, // 핫/아이스 정보 추가
+                    total: 0 // 총 가격 초기화
+                };
+
+                // 해당 음료의 총 가격 업데이트
+                drinkInfo.total = calculateTotalPrice(drinkInfo);
+                totalPrice += drinkInfo.total;
+
+                // 선택된 음료 정보를 JSON 형식으로 문자열화하여 저장 (이 예제에서는 콘솔에 출력)
+                var jsonString = JSON.stringify({
+                    name: drinkInfo.name,
+                    price: drinkInfo.price,
+                    quantity: drinkInfo.quantity,
+                    hotOrIced: drinkInfo.hotOrIced,
+                    total: drinkInfo.total
+                });
+                console.log("Selected Drink: " + jsonString);
+
+                // 실제로 서버에 전송하거나, 로컬 스토리지 등을 사용하여 저장할 수 있음
+                // AJAX 또는 Fetch를 사용하여 서버에 데이터 전송
+                fetch('/order/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonString
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Order result:', data);
+                    // 서버로부터의 응답에 따라 적절한 처리를 수행
+                })
+                .catch(error => {
+                    console.error('Order failed:', error);
+                });
+            }
+        });
+
+        // 전체 가격을 하단에 표시
+        document.getElementById('totalPrice').textContent = "총 가격: ₩" + totalPrice;
+    }
+
+    // 총 가격 계산 함수
+    function calculateTotalPrice(drinkInfo) {
+        var total = drinkInfo.price * drinkInfo.quantity;
+
+        // 아이스일 경우 추가 비용 500원
+        if (drinkInfo.hotOrIced === 'iced') {
+            total += 500;
+        }
+
+        return total;
+    }
+    </script>
+</head>
+<body>
+    <h1>주문</h1>
+    <form action="orderResult.jsp" method="post">
+        <table>
+            <tr>
+                <th>음료</th>
+                <th>가격</th>
+                <th>수량</th>
+                <th>핫/아이스</th> <!-- 새로운 열 추가 -->
+            </tr>
+            <tr>
+                <td name="americano_name">아메리카노</td>
+                <td name="americano_price">2000</td>
+                <td><input type="number" name="quantity_americano" value="0" min="0"></td>
+                <td>
+                    <select name="hotOrIced_americano">
+                        <option value="hot">핫</option>
+                        <option value="iced">아이스(+500)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td name="latte_name">라떼</td>
+                <td name="latte_price">2500</td>
+                <td><input type="number" name="quantity_latte" value="0" min="0"></td>
+                <td>
+                    <select name="hotOrIced_latte">
+                        <option value="hot">핫</option>
+                        <option value="iced">아이스(+500)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td name="macchiato_name">마키아토</td>
+                <td name="macchiato_price">3000</td>
+                <td><input type="number" name="quantity_macchiato" value="0" min="0"></td>
+                <td>
+                    <select name="hotOrIced_macchiato">
+                        <option value="hot">핫</option>
+                        <option value="iced">아이스(+500)</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br>
+        
+        <!-- 전체 가격 표시 -->
+        <div id="totalPrice">총 가격: ₩0</div>
+
+        <!-- 주문 버튼 클릭 시 JavaScript 함수 호출 -->
+        <input type="button" value="주문" onclick="saveSelectedDrinks()">
+    </form>
+</body>
+</html>

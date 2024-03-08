@@ -1,0 +1,55 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>주문상세 페이지</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1> 주문 상세 </h1>
+<hr>
+주문번호 : ${dto.orderId} <br>
+주문일 : ${dto.orderDate}
+<table>
+    <tr>
+        <th>제품명</th>
+        <th>수량</th>
+        <th>금액</th>
+    </tr>
+    <c:forEach var="item" items="${dto.orderItems}">
+        <tr>
+            <td>${item.productName}</td>
+            <td>${item.amount}</td>
+            <td>${item.price}</td>
+        </tr>
+    </c:forEach>
+    <tr>
+        <td colspan="2" class="total">총 금액</td>
+        <td class="total">${dto.totalPrice}</td>
+    </tr>
+</table>
+
+<hr>
+
+<br><p>
+<a href="#">목록보기</a></td>
+</body>
+</html>

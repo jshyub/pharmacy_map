@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/simpleShop.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/join.css">
+    <link rel="stylesheet" type="text/css" href="./style/common.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <title>회원가입</title>
+    <script>
+      $(document).ready(function() {
+        // 1. 아이디 입력창 정보 가져오기
+        const joinId = $('#JOIN_ID');
+        // 2. 성공 메시지 정보 가져오기
+        let elSuccessMessage = $('.success-message');
+        // 3. 실패 메시지 정보 가져오기 (글자수 제한 4~12글자)
+        let elFailureMessage = $('.failure-message');
+        // 4. 실패 메시지2 정보 가져오기 (영어 또는 숫자)
+        let elFailureMessageTwo = $('.failure-message2');
+
+        // 1. 비밀번호 입력창 정보 가져오기
+        const joinPw = $('#JOIN_PW');
+        // 2. 비밀번호 확인 입력창 정보 가져오기
+        const joinCheckPw = $('#JOIN_CHECKPW');
+        // 3. 실패 메시지 정보 가져오기 (비밀번호 불일치)
+        let elMismatchMessage = $('.mismatch-message');
+        // 4. 실패 메시지 정보 가져오기 (8글자 이상, 영문, 숫자, 특수문자 미사용)
+        let elStrongPasswordMessage = $('.strongPassword-message');
+
+        const joinEmail = $('#JOIN_EMAIL');
+        const joinBtn = $('#JOIN_BTN');
+
+        function idLength() {
+          return joinId.val().length >= 4 && joinId.val().length <= 12;
+        }
+
+        function onlyNumberAndEnglish() {   // 아이디 유효성 검사
+          return /^[A-Za-z0-9][A-Za-z0-9]*$/.test(joinId.val());
+        }
+
+        function strongPassword() {   // 비밀번호 유효성 검사
+          return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(joinPw.val());
+        }
+
+        function isMatch() {    // 비번일치 유효성 검사
+          return joinPw.val() === joinCheckPw.val();
+        }
+
+        joinId.on('keyup', function() {
+          // 값을 입력한 경우
+          if (joinId.val().length !== 0) {
+            if (!onlyNumberAndEnglish()) {
+              // 영어 또는 숫자 외의 값을 입력했을 경우
+              elSuccessMessage.addClass('hide');
+              elFailureMessage.addClass('hide');
+              elFailureMessageTwo.removeClass('hide');  // 영어 또는 숫자만 가능합니다
+            } else if (!idLength()) {
+              // 글자 수가 4~12글자가 아닐 경우
+              elSuccessMessage.addClass('hide');      // 성공 메시지가 가려져야 함
+              elFailureMessage.removeClass('hide');   // 아이디는 4~12글자이어야 합니다
+              elFailureMessageTwo.addClass('hide');   // 실패 메시지2가 가려져야 함
+            } else {
+              // 조건을 모두 만족할 경우
+              elSuccessMessage.removeClass('hide');   // 사용할 수 있는 아이디입니다
+              elFailureMessage.addClass('hide');      // 실패 메시지가 가려져야 함
+              elFailureMessageTwo.addClass('hide');   // 실패 메시지2가 가려져야 함
+            }
+          // 값을 입력하지 않은 경우 (지웠을 때)
+          // 모든 메시지를 가린다.
+          } else {
+            elSuccessMessage.addClass('hide');
+            elFailureMessage.addClass('hide');
+            elFailureMessageTwo.addClass('hide');
+          }
+        });
+
+        joinPw.on('keyup', function() {
+          // 값을 입력한 경우
+          if (joinPw.val().length !== 0) {
+            if (strongPassword()) {
+              elStrongPasswordMessage.addClass('hide');     // 실패 메시지가 가려져야 함
+            } else {
+              elStrongPasswordMessage.removeClass('hide');  // 실패 메시지가 보여야 함
+            }
+          // 값을 입력하지 않은 경우 (지웠을 때)
+          // 모든 메시지를 가린다.
+          } else {
+            elStrongPasswordMessage.addClass('hide');
+          }
+        });
+
+        joinCheckPw.on('keyup', function() {
+          if (joinCheckPw.val().length !== 0) {
+            if (isMatch()) {
+              elMismatchMessage.addClass('hide');     // 실패 메시지가 가려져야 함
+            } else {
+              elMismatchMessage.removeClass('hide');  // 실패 메시지가 보여야 함
+            }
+          } else {
+            elMismatchMessage.addClass('hide');       // 실패 메시지가 가려져야 함
+          }
+        });
+
+        function color() {
+          // 회원가입 유효성 검사 후 회원가입버튼 활성화
+          if (joinId.val().length > 0 && joinPw.val().length >= 8 && joinEmail.val().indexOf('@') !== -1) {   // 아이디의 길이가 1글자 이상이고, @가있어야하고, 패스워드가 5자리 이상일때
+            joinBtn.css('background-color', '#0095F6');
+            joinBtn.prop('disabled', false);
+          } else {
+            joinBtn.css('background-color', '#C0DFFD');
+            joinBtn.prop('disabled', true);
+          }
+        }
+
+        function moveToLogin() {
+          // 회원가입 후 이동경로
+          // 클릭후 로그인페이지
+          if (joinId.val().length > 0 && joinPw.val().length >= 8 && joinEmail.val().indexOf('@') !== -1) {    // 아이디의 길이가 1글자 이상이고, @가있어야하고, 패스워드가 5자리 이상일때
+            location.replace('./login.html');
+            alert('회원가입이 완료되었습니다.');
+          }
+        }
+
+        joinId.on('keyup', color);    // 입력후 버튼 활성화
+        joinPw.on('keyup', color);
+        joinEmail.on('keyup', color);
+        joinBtn.on('click', moveToLogin);   // 회원가입 클릭 후 로그인페이지
+      });
+    </script>
+</head>
+<body>
+    <article>
+        <div class="navbar">
+            <a class="logo" href="./simpleShop.html">
+              <img src="images/logo.png" height="20px">
+            </a>
+            <ul>
+              <li><a href="#">Contact</a></li>
+              <li><a href="index.html">Map</a></li>
+              <li><a href="cart.html">Cart</a></li>
+              <li><a href="login.html">Login</a></li>
+            </ul>
+          </div>
+          <hr>
+        <div class = "join_wrapper">
+            <div class="join_logo">Join</div>
+            <form class="join_form">
+                <input id="JOIN_NAME" class = "join_text" type="text" name="name" placeholder="이름">
+                <input id="JOIN_NUMBER" class = "join_text" type="text" name="phoneNumber" placeholder="전화번호">
+                <input id="JOIN_ID" class = "join_text" type="text" name="id" placeholder="아이디">
+                <div class="success-message hide">사용할 수 있는 아이디입니다</div>
+                <div class="failure-message hide">아이디는 4~12글자이어야 합니다</div>
+                <div class="failure-message2 hide">영어 또는 숫자만 가능합니다</div>
+
+                <input  id="JOIN_PW" class = "join_text" type="password" name="pw" placeholder="비밀번호">
+                <div class="strongPassword-message hide">8글자 이상, 영문, 숫자, 특수문자(@$!%*#?&)를 사용하세요</div>
+                
+                <input  id="JOIN_CHECKPW" class = "join_text" type="password" name="checkPw" placeholder="비밀번호 확인">
+                <div class="mismatch-message hide">비밀번호가 일치하지 않습니다</div>
+
+                <input id="JOIN_EMAIL" class = "join_text" type="email" name="email" placeholder="이메일">
+                <input id="JOIN_ADDRESS" class = "join_text" type="text" name="address" placeholder="주소">
+                <button id="JOIN_BTN" class = "join_btn" type="button">회원가입</button>
+                
+            </form>
+            <!-- <script src="js/join.js" defer=""></script> -->
+        </div>
+      </article>
+</body>
+</html>
